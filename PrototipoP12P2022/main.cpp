@@ -21,17 +21,9 @@ void crearArchivoCartelera();
 void agregarCartelera( fstream& );
 void actualizarRegistroCartelera(fstream&);
 void mostrarLineaCartelera( ostream&, const ClsCartelera & );
-/*void nuevoEmpleado( fstream& );
-void crearArchivoCredito();
-void consultarRegistro(fstream&);
-void mostrarLineaPantalla(const ClsEmpleados &);
-void actualizarRegistro(fstream&);
-void mostrarLinea( ostream&, const ClsEmpleados & );
-void imprimirRegistro( fstream& );
-void eliminarRegistro( fstream& );
-void buscarEmpleado( fstream& );
-string obtenerNombreUsuario();
-void escribirBitacora(int, string);*/
+void eliminarRegistroCartelera( fstream& );
+void consultarRegistroCartelera(fstream&);
+void mostrarLineaPantallaCartelera(const ClsCartelera &);
 
 int main()
 {
@@ -61,16 +53,17 @@ int main()
     {
         system("cls");
 
-        cout<<"  |||||||"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |||||||"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<"  |     |"<<endl;
-        cout<<""<<endl;
+        fstream archivoCartelera("RegistroCartelera.dat", ios::in | ios::out | ios::binary);
+
+        if ( !archivoCartelera )
+        {
+            cerr << "No se pudo abrir el archivo." << endl;
+            crearArchivoCartelera();
+            cout <<  "Archivo creado satisfactoriamente, pruebe de nuevo";
+            exit ( 1 );
+            exit( EXIT_FAILURE );
+        }
+
         cout<<"Angel Roberto Agustin de Leon Hernandez / 9491-21-7527"<<endl;
         cout<<""<<endl;
         cout<<"-----------------------------------------"<<endl;
@@ -93,7 +86,9 @@ int main()
         {
             case 1:
                 {
-
+                    system("cls");
+                    consultarRegistroCartelera(archivoCartelera);
+                    getch();
                 }
                 break;
 
@@ -234,19 +229,23 @@ int main()
                                                                     break;
                                                                 case 2:
                                                                     {
-                                                                        /*system("cls");
+                                                                        system("cls");
                                                                         actualizarRegistroCartelera(archivoCartelera);
-                                                                        getch();*/
+                                                                        getch();
                                                                     }
                                                                     break;
                                                                 case 3:
                                                                     {
-                                                                        //EliminarCartelera
+                                                                        system("cls");
+                                                                        eliminarRegistroCartelera(archivoCartelera);
+                                                                        getch();
                                                                     }
                                                                     break;
                                                                 case 4:
                                                                     {
-                                                                        //MostrarCartelera
+                                                                        system("cls");
+                                                                        consultarRegistroCartelera(archivoCartelera);
+                                                                        getch();
                                                                     }
                                                                     break;
 
@@ -429,7 +428,7 @@ void agregarCartelera( fstream &insertarEnArchivoCartelera )
 /////////////////////////////////////////////FIN AGREGAR CARTELERA/////////////////////////////
 
 //////////////////////////////////////////MODIFICAR CARTELERA//////////////////////////////////
-/*void actualizarRegistroCartelera( fstream &actualizarArchivoCartelera)
+void actualizarRegistroCartelera( fstream &actualizarArchivoCartelera)
 {
    int numeroClave = obtenerClave( "Escriba la cuenta que desea actualizar" );
 
@@ -480,4 +479,75 @@ void mostrarLineaCartelera( ostream &salidaCartelera, const ClsCartelera &regist
           << setw( 20 ) << registroCartelera.mobtenerCodigo().data()
           << endl;
 
-}*/
+}
+//////////////////////////////////////////////////////////////TERMINA ACTUALIZAR CARTELERA//////////////////
+
+//////////////////////////////////////////////////ELIMINAR CARTELERA//////////////////////////////////////
+void eliminarRegistroCartelera( fstream &eliminarDeArchivoCartelera )
+{
+   int numeroClave= obtenerClave( "Escriba la cuenta a eliminar" );
+
+   eliminarDeArchivoCartelera.seekg(
+      ( numeroClave - 1 ) * sizeof( ClsCartelera ) );
+
+   ClsCartelera cartelera;
+   eliminarDeArchivoCartelera.read( reinterpret_cast< char * >( &cartelera ),
+      sizeof( ClsCartelera ) );
+
+   if ( cartelera.mobtenerClave() != 0 ) {
+      ClsCartelera carteleEnBlancoSueldo;
+
+      eliminarDeArchivoCartelera.seekp( ( numeroClave - 1 ) *
+         sizeof( ClsCartelera ) );
+
+      eliminarDeArchivoCartelera.write(
+         reinterpret_cast< const char * >( &carteleEnBlancoSueldo ),
+         sizeof( ClsCartelera ) );
+
+      cout << "Empleado clave #" << numeroClave << " eliminado correctamente.\n";
+
+   }
+
+   else
+   {
+       cerr << "Empleado clave #" << numeroClave << " esta vacia.\n";
+   }
+   getch();
+
+}
+////////////////////////////////////////////FIN ELIMINAR CARTELERA////////////////
+
+////////////////////////////////////////////MOSTRAR CARTELERA/////////////////////////
+void consultarRegistroCartelera( fstream &leerDeArchivoCartelera )
+{
+
+   cout << left << setw( 9 ) << "Clave" << setw( 20 )
+       << "Nombre" << setw( 20 ) << "Precio"
+       << setw( 20 ) << "Clave" << endl;
+
+   leerDeArchivoCartelera.seekg( 0 );
+
+   ClsCartelera cartelera;
+   leerDeArchivoCartelera.read( reinterpret_cast< char * >( &cartelera ),
+      sizeof( ClsCartelera ) );
+
+   while ( !leerDeArchivoCartelera.eof() ) {
+
+      if ( cartelera.mobtenerClave() != 0 )
+         mostrarLineaPantallaCartelera(cartelera);
+
+      leerDeArchivoCartelera.read( reinterpret_cast< char * >( &cartelera ),
+         sizeof( ClsCartelera ) );
+
+   }
+
+}
+
+void mostrarLineaPantallaCartelera( const ClsCartelera &registroCartelera )
+{
+   cout << left << setw( 10 ) << registroCartelera.mobtenerClave()
+          << setw( 20 ) << registroCartelera.mobtenerNombreCartelera().data()
+          << setw( 20 ) << registroCartelera.mobtenerPrecio().data()
+          << setw( 20 ) << registroCartelera.mobtenerCodigo().data() << endl;
+
+}
