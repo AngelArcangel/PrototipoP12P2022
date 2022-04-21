@@ -12,12 +12,15 @@
 
 using namespace std;
 
-int obtenerCuenta( const char * const );
+int obtenerClave( const char * const );
 int obtenerUsuario( const char * const );
 void crearArchivoUsuarios();
 void nuevoUsuario( fstream& );
 void mostrarCartelera();
 void crearArchivoCartelera();
+void agregarCartelera( fstream& );
+void actualizarRegistroCartelera(fstream&);
+void mostrarLineaCartelera( ostream&, const ClsCartelera & );
 /*void nuevoEmpleado( fstream& );
 void crearArchivoCredito();
 void consultarRegistro(fstream&);
@@ -38,10 +41,13 @@ int main()
     int menuLoginMenu;
     int menuCartelera;
 
-    //Variables
-    int m_iclaveEmpleado=0;
-    char m_snombreEmpleado[0];
-    int iingresoUsuario;
+    //Variables Cartelera
+    int m_iclaveCartelera=0;
+    char m_snombreCartelera[0];
+    char m_sPrecio[0];
+    char m_sCodigo[0];
+
+    //LOGIN
     char snombreUsuario[ 20 ];
     int isesion = 0;
     int a=1;
@@ -205,10 +211,10 @@ int main()
                                                             cout<<"-----------------------------------------"<<endl;
                                                             cout<<"|-----------MENU CARTELERA--------------|"<<endl;
                                                             cout<<"-----------------------------------------"<<endl;
-                                                            cout<<"1. Agregar"<<endl;
-                                                            cout<<"2. Modificar"<<endl;
-                                                            cout<<"3. Eliminar"<<endl;
-                                                            cout<<"4. Mostrar"<<endl;
+                                                            cout<<"1. AGREGAR"<<endl;
+                                                            cout<<"2. MODIFICAR/ACTUALIZAR"<<endl;
+                                                            cout<<"3. ELIMINAR"<<endl;
+                                                            cout<<"4. MOSTRAR"<<endl;
                                                             cout<<"0. EXIT"<<endl;
 
                                                             cout<<"-------------------------------"<<endl;
@@ -221,12 +227,16 @@ int main()
                                                             {
                                                                 case 1:
                                                                     {
-                                                                        //AgregarCartelera
+                                                                        system("cls");
+                                                                        agregarCartelera(archivoCartelera);
+                                                                        getch();
                                                                     }
                                                                     break;
                                                                 case 2:
                                                                     {
-                                                                        //ModificarCartelera
+                                                                        /*system("cls");
+                                                                        actualizarRegistroCartelera(archivoCartelera);
+                                                                        getch();*/
                                                                     }
                                                                     break;
                                                                 case 3:
@@ -358,3 +368,116 @@ void crearArchivoCartelera()
     }
 }
 
+///////////////////////////////////////////////////AGREAGAR CARTELERA////////////////////////////////////////////
+int obtenerClave( const char * const indicador )
+{
+   int m_iclaveCartelera;
+
+   do {
+      cout << indicador << " (1 - 100): ";
+      cin >> m_iclaveCartelera;
+
+   } while ( m_iclaveCartelera < 1 || m_iclaveCartelera > 100 );
+
+   return m_iclaveCartelera;
+
+}
+
+void agregarCartelera( fstream &insertarEnArchivoCartelera )
+{
+   int m_iclaveCartelera = obtenerClave( "Escriba el nuevo numero de cartelera" );
+
+   insertarEnArchivoCartelera.seekg(
+      ( m_iclaveCartelera - 1 ) * sizeof( ClsCartelera) );
+
+   ClsCartelera cartelera;
+   insertarEnArchivoCartelera.read( reinterpret_cast< char * >( &cartelera ),
+      sizeof( ClsCartelera ) );
+
+   if ( cartelera.mobtenerClave() == 0 ) {
+
+      char m_snombreCartelera[ 20 ];
+      char m_sPrecio[20];
+      char m_sCodigo[20];
+
+      cout << "Escriba el nombre: ";
+      cin >> setw( 20 ) >> m_snombreCartelera;
+      cout << "Escriba el Precio: ";
+      cin >> setw( 20 ) >> m_sPrecio;
+      cout << "Escriba el Codigo: ";
+      cin >> setw( 20 ) >> m_sCodigo;
+
+      cartelera.mestablecerNombreCartelera( m_snombreCartelera);
+      cartelera.mestablecerClave( m_iclaveCartelera);
+      cartelera.mestablecerPrecio( m_sPrecio);
+      cartelera.mestablecerCodigo( m_sCodigo);
+
+      insertarEnArchivoCartelera.seekp( ( m_iclaveCartelera - 1 ) *
+         sizeof( ClsCartelera ) );
+
+      insertarEnArchivoCartelera.write(
+         reinterpret_cast< const char * >( &cartelera ),
+         sizeof( ClsCartelera ) );
+
+   }
+
+   else
+      cerr << "La cuenta #" << m_iclaveCartelera
+           << " ya contiene informacion." << endl;
+
+}
+/////////////////////////////////////////////FIN AGREGAR CARTELERA/////////////////////////////
+
+//////////////////////////////////////////MODIFICAR CARTELERA//////////////////////////////////
+/*void actualizarRegistroCartelera( fstream &actualizarArchivoCartelera)
+{
+   int numeroClave = obtenerClave( "Escriba la cuenta que desea actualizar" );
+
+   actualizarArchivoCartelera.seekg(
+      ( numeroClave - 1 ) * sizeof( ClsCartelera ) );
+
+   ClsCartelera cartelera;
+   actualizarArchivoCartelera.read( reinterpret_cast< char * >( &cartelera ),
+      sizeof( ClsCartelera ) );
+
+   if ( cartelera.mobtenerClave() != 0 ) {
+      mostrarLineaCartelera( cout, cartelera );
+
+      cout << "\nEscriba el nombre: ";
+      char m_snombreCartelera [ 20 ];
+      cin >> m_snombreCartelera;
+
+      cout << "\nEscriba el Precio: ";
+      char m_sPrecio [ 20 ];
+      cin >> m_sPrecio;
+
+      cout << "\nEscriba el Codigo: ";
+      char m_sCodigo [ 20 ];
+      cin >> m_sCodigo;
+
+      cartelera.mestablecerNombreCartelera( m_snombreCartelera );
+      mostrarLineaCartelera( cout, cartelera );
+
+      actualizarArchivoCartelera.seekp(
+         ( numeroClave - 1 ) * sizeof( ClsCartelera ) );
+
+      actualizarArchivoCartelera.write(
+         reinterpret_cast< const char * >( &cartelera ),
+         sizeof( ClsCartelera ) );
+   }
+
+   else
+      cerr << "La cuenta #" << numeroClave
+         << " no tiene informacion." << endl;
+
+}
+
+void mostrarLineaCartelera( ostream &salidaCartelera, const ClsCartelera &registroCartelera )
+{
+   salidaCartelera << left << setw( 9 ) << registroCartelera.mobtenerClave()
+          << setw( 20 ) << registroCartelera.mobtenerNombreCartelera().data()
+          << setw( 20 ) << registroCartelera.mobtenerPrecio().data()
+          << setw( 20 ) << registroCartelera.mobtenerCodigo().data()
+          << endl;
+
+}*/
