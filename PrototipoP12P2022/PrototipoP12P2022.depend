@@ -13,7 +13,7 @@
 	<string>
 	<iostream>
 
-1650571695 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\main.cpp
+1650576192 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\main.cpp
 	<conio.h>
 	<iostream>
 	<fstream>
@@ -24,8 +24,17 @@
 	"ClsLogin.h"
 	"ClsCartelera.h"
 
-1650571540 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\src\clscartelera.cpp
+1650574488 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\src\clscartelera.cpp
 	"ClsCartelera.h"
+	<conio.h>
+	<iomanip>
+	<iostream>
+	<fstream>
+	<string>
+	<cstdlib>
+	<cstring>
 
-1650571540 c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\include\clscartelera.h
+1650574690 c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\include\clscartelera.h
+	<string>
+	<iostream>
 
