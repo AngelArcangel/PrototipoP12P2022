@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1650562665 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\src\clslogin.cpp
+	"ClsLogin.h"
+	<conio.h>
+	<iomanip>
+	<iostream>
+	<fstream>
+	<string>
+	<cstdlib>
+	<cstring>
+
+1650562516 c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\include\clslogin.h
+	<string>
+	<iostream>
+
+1650571695 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\main.cpp
+	<conio.h>
+	<iostream>
+	<fstream>
+	<string>
+	<iomanip>
+	<cstdlib>
+	<ctime>
+	"ClsLogin.h"
+	"ClsCartelera.h"
+
+1650571540 source:c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\src\clscartelera.cpp
+	"ClsCartelera.h"
+
+1650571540 c:\users\arcangel\desktop\clases\semestre3\programacioni\git\prototipop12p2022\prototipop12p2022\include\clscartelera.h
+
